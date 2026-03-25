@@ -669,12 +669,24 @@ function downloadFixtureImage() {
         const homeDisplay  = homePlayer  ? homePlayer.name  : f.home;
         const awayDisplay  = awayPlayer  ? awayPlayer.name  : f.away;
         
+        // Get phone and username for display
+        const homePhone = homePlayer ? (homePlayer.phone || 'N/A') : 'N/A';
+        const awayPhone = awayPlayer ? (awayPlayer.phone || 'N/A') : 'N/A';
+        const homeUsername = homePlayer ? homePlayer.username : f.home;
+        const awayUsername = awayPlayer ? awayPlayer.username : f.away;
+        
         const row = document.createElement('div');
         row.className = 'poster-match-row';
         row.innerHTML = `
-            <div class="poster-match-home">${homeDisplay}</div>
+            <div class="poster-match-home">
+                <div class="poster-player-name">${homeDisplay}</div>
+                <div class="poster-player-details">${homePhone} • ${homeUsername}</div>
+            </div>
             <div class="poster-match-vs">VS</div>
-            <div class="poster-match-away">${awayDisplay}</div>
+            <div class="poster-match-away">
+                <div class="poster-player-name">${awayDisplay}</div>
+                <div class="poster-player-details">${awayPhone} • ${awayUsername}</div>
+            </div>
         `;
         list.appendChild(row);
     });
