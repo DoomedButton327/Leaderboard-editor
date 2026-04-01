@@ -1,49 +1,55 @@
-// postponements.js
+// Postponement Tracking System
 
-class PostponementsManager {
+class PostponementManager {
     constructor() {
-        this.postponements = {};
-        this.auditLog = [];
+        this.postponements = [];
+        this.leagues = {};
     }
 
-    // Track postponements per player and league
-    trackPostponement(playerId, leagueId) {
-        if (!this.postponements[leagueId]) {
-            this.postponements[leagueId] = {};
-        }
-        if (!this.postponements[leagueId][playerId]) {
-            this.postponements[leagueId][playerId] = 0;
-        }
-        this.postponements[leagueId][playerId]++;
-        this.auditLog.push(`Tracked postponement for player ${playerId} in league ${leagueId}`);
-    }
-
-    // Decrement a player's postponement count
-    decrementPostponement(playerId, leagueId) {
-        if (this.postponements[leagueId] && this.postponements[leagueId][playerId]) {
-            this.postponements[leagueId][playerId]--;
-            this.auditLog.push(`Decremented postponement for player ${playerId} in league ${leagueId}`);
-            
-            // Remove entry if count is zero
-            if (this.postponements[leagueId][playerId] <= 0) {
-                delete this.postponements[leagueId][playerId];
-            }
+    // Set up leagues with player limit
+    setupLeague(leagueName) {
+        if (!(leagueName in this.leagues)) {
+            this.leagues[leagueName] = { players: [], limit: 20, postponements: [] };
         }
     }
 
-    // Reset counts at the start of a new season
-    resetPostponements(leagueId) {
-        if (this.postponements[leagueId]) {
-            delete this.postponements[leagueId];
-            this.auditLog.push(`Postponements reset for league ${leagueId}`);
+    // Add player to league
+    addPlayer(leagueName, player) {
+        if (this.leagues[leagueName] && this.leagues[leagueName].players.length < this.leagues[leagueName].limit) {
+            this.leagues[leagueName].players.push(player);
         }
     }
 
-    // Log the current state of postponements
-    audit() {
-        return this.auditLog;
+    // Track a postponement
+    trackPostponement(matchId, leagueName, status) {
+        const postponement = { matchId, leagueName, status, timestamp: new Date().toISOString() };
+        this.postponements.push(postponement);
+        this.leagues[leagueName].postponements.push(postponement);
+    }
+
+    // Update postponement status
+    updatePostponementStatus(matchId, leagueName, newStatus) {
+        const postponement = this.leagues[leagueName].postponements.find(p => p.matchId === matchId);
+        if (postponement) {
+            postponement.status = newStatus;
+        }
+    }
+
+    // Get all postponements
+    getPostponements() {
+        return this.postponements;
+    }
+
+    // Audit logging
+    auditLog(action) {
+        console.log(`[${new Date().toISOString()}] ${action}`);
     }
 }
 
-// Exporting the class for external usage
-module.exports = PostponementsManager;
+// Sample usage
+const manager = new PostponementManager();
+manager.setupLeague('League A');
+manager.addPlayer('League A', 'Player 1');
+manager.trackPostponement('Match123', 'League A', 'Pending');
+manager.updatePostponementStatus('Match123', 'League A', 'Rescheduled');
+manager.auditLog('Postponement for Match123 updated to Rescheduled.');
