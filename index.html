@@ -403,6 +403,19 @@
                 </button>
                 <div class="acc-body">
                     <p class="acc-desc">Upload a WhatsApp chat screenshot to automatically detect postponements, no-shows, and match results.</p>
+                    
+                    <!-- API Setup -->
+                    <div style="background:rgba(66,133,244,0.08);border:1px solid rgba(66,133,244,0.2);padding:12px;border-radius:8px;margin-bottom:12px;">
+                        <div style="font-size:0.8rem;color:#4285f4;font-weight:600;margin-bottom:6px;">🔑 Google Gemini API Setup (FREE)</div>
+                        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">
+                            Get a free API key: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#4285f4;">aistudio.google.com/app/apikey</a><br>
+                            Free tier: 1,500 requests/day • No credit card required
+                        </div>
+                        <input type="password" id="geminiApiKey" placeholder="Paste your Gemini API key here" class="field" style="margin-bottom:8px;">
+                        <button class="btn-outline full-w" onclick="saveGeminiApiKey()" style="font-size:0.8rem;padding:8px;"><i class="fas fa-save"></i> Save API Key</button>
+                        <div id="gemini-key-status" style="font-size:0.75rem;margin-top:6px;"></div>
+                    </div>
+                    
                     <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);padding:12px;border-radius:8px;margin-bottom:12px;">
                         <div style="font-size:0.8rem;color:var(--purple);font-weight:600;margin-bottom:6px;">What this detects:</div>
                         <ul style="font-size:0.75rem;color:var(--muted);margin:0;padding-left:20px;line-height:1.6;">
@@ -427,8 +440,8 @@
                     <i class="fas fa-chevron-down acc-chevron"></i>
                 </button>
                 <div class="acc-body">
-                    <p class="acc-desc">Screenshots submitted with results. Only visible here in Admin.</p>
-                    <div id="evidence-grid" class="evidence-grid">
+                    <p class="acc-desc">Screenshots submitted with results. Organized by match.</p>
+                    <div id="evidence-grid" class="evidence-grid-organized">
                         <p style="color:var(--muted); font-size:0.85rem;">No evidence images yet.</p>
                     </div>
                 </div>
@@ -518,3 +531,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
